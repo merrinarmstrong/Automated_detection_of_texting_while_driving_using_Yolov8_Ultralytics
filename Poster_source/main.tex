@@ -1,0 +1,330 @@
+\documentclass[
+    15pt,
+    margin=0.25in,
+    innermargin=0.25in,
+]{tikzposter}
+
+% ===== Size =====
+\geometry{paperwidth=33.11in,paperheight=46.81in} % A0
+
+% ===== Packages =====
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault}
+
+\usepackage{csquotes}
+\usepackage{amsmath, amsfonts, amssymb, mathrsfs, bm, bbm}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{tcolorbox}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{qrcode} % for QR code
+\usepackage[backend=biber,style=numeric]{biblatex}
+
+
+% Your theme files
+\usepackage{glasgow-poster-theme}
+
+% Visible area tweak
+\makeatletter
+\setlength{\TP@visibletextwidth}{32in}
+\setlength{\TP@visibletextheight}{45in}
+\makeatother
+
+\addbibresource{refs.bib}
+
+% ===== Theme =====
+\tikzposterlatexaffectionproofoff
+\usetheme{UniGlasgowTheme}
+
+
+% ===== UCD COLOR THEME (define first, then use) =====
+\definecolor{ucdDarkBlue}{RGB}{0,58,112}    % #003A70
+\definecolor{ucdDarkBlueFont}{RGB}{14,34,52}    % #003A70
+\definecolor{ucdBlue}{RGB}{0,119,200}
+\definecolor{ucdGreen}{RGB}{0,154,68}       % #009A44
+\definecolor{ucdLime}{RGB}{108,194,74}      % #6CC24A
+\definecolor{ucdGold}{RGB}{255,210,0}
+\definecolor{ucdGreyBG}{RGB}{248,248,248}   % very light page bg
+
+\definecolorstyle{UCDTheme}{
+  % palette slots
+  \definecolor{colorOne}{named}{ucdGreen}     % block titles (subtitles)
+  \definecolor{colorTwo}{named}{ucdDarkBlue}  % body text
+  \definecolor{colorThree}{named}{ucdGreyBG}  % page background
+}{
+  % Page background
+  \colorlet{backgroundcolor}{colorThree}
+
+  % ===== Title (header): light bg, dark text =====
+  \colorlet{titlebgcolor}{white}
+  \colorlet{titlefgcolor}{ucdDarkBlue}
+  \colorlet{titleinnerframecolor}{white}
+  \colorlet{titlerulecolor}{ucdDarkBlue}
+
+  % ===== Block titles (subtitles): green bar =====
+  \colorlet{blocktitlebgcolor}{ucdDarkBlue}
+  \colorlet{blocktitlefgcolor}{white}
+  \colorlet{blocktitleinnerframecolor}{ucdGreen}
+
+  % ===== Block body (content): white bg, dark-blue text =====
+  \colorlet{blockbodybgcolor}{white}
+  \colorlet{blockbodyfgcolor}{ucdDarkBlueFont}
+  \colorlet{blockbodyinnerframecolor}{white}
+
+  % Inner blocks (optional)
+  \colorlet{innerblocktitlebgcolor}{ucdLime}
+  \colorlet{innerblocktitlefgcolor}{white}
+  \colorlet{innerblockbodybgcolor}{white}
+  \colorlet{innerblockbodyfgcolor}{ucdDarkBlue}
+
+  % Accents
+  \colorlet{framecolor}{ucdBlue}
+  \colorlet{notefrcolor}{ucdBlue}
+  \colorlet{notebgcolor}{white}
+}
+
+% NOW apply our color style (ensure no other \usecolorstyle comes after this)
+\usecolorstyle{UCDTheme}
+
+
+% ===== Title / Authors / Logo (adjusted header) =====
+\title{%
+  \begin{minipage}[c]{0.99\linewidth}
+    \raggedright
+    \Huge \textbf{Automated Detection of Texting While Driving using YOLOv8 Ultralytics} \\[0.5em]
+    \large
+    \textbf{Merrin Sancia Sahaya Armstrong - 24214316} \\
+    \textbf{Jayati Jadhav - 24219461} \\
+    MSc Data and Computational Science \\
+    School of Mathematics and Statistics, University College Dublin
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.1\linewidth}
+      \centering
+      \includegraphics[width=1.15\linewidth]{figures/UCD-logo.png}
+    \end{minipage}
+}
+
+\begin{document}
+\maketitle
+\centering
+
+\begin{columns}
+
+% ================= LEFT COLUMN =================
+\column{0.5}
+
+% ---------- INTRO ----------
+\block{Introduction \& Motivation}{
+\begin{itemize}[leftmargin=*, itemsep=0.35em]
+  \textbf Texting while driving is a leading cause of road accidents, significantly impairing driver attention and reaction time. In Ireland, mobile phone use behind the wheel is prohibited, yet violations remain common on Dublin roads, endangering pedestrians, cyclists, and other motorists. Traditional enforcement methods are resource-intensive and reactive, capturing only a small fraction of offences. Leveraging recent advances in computer vision, specifically the YOLOv8 object detection framework. This project develops an automated pipeline to identify texting drivers, while ensuring GDPR compliance by using only consented or publicly available data.
+\end{itemize}
+
+\vspace{0.5em}
+\begin{center}
+\begin{minipage}{0.32\linewidth}\centering
+  \includegraphics[height=8cm]{figures/intro.png}
+  \captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+  \captionof{figure}{Driver Texting as a Pedestrian Crosses.}
+\end{minipage}\hfill
+\begin{minipage}{0.65\linewidth}\centering
+  \includegraphics[height=8cm]{figures/yolov8-comparison-plots.png} % <- use fixed PDF/JPG
+  \captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+  \captionof{figure}{YOLO Models Detection Comparison.}
+\end{minipage}
+\end{center}
+
+}
+
+
+% ---------- METHODOLOGY ----------
+\block{Methodology }{
+\begingroup
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\setlength{\abovedisplayshortskip}{2pt}
+\setlength{\belowdisplayshortskip}{2pt}
+
+% ---- Data Collection + Data Preparation ----
+\textbf{Data Collection:} The dataset was obtained from Roboflow’s \textit{“Phone While Driving”} dataset, consisting of images with corresponding label files.
+
+\vspace{0.5em}
+
+\textbf{Data Preparation:} The dataset was annotated in YOLO format (bounding boxes with class labels). Preprocessing involved verifying annotations for consistency and ensuring image–label alignment.  
+
+\vspace{1.0em}
+
+% ---- Side-by-side: Architecture & Image ----
+\noindent
+\begin{minipage}[t]{0.55\linewidth}\vspace{0pt}
+\textbf{Model Architecture:} The YOLOv8 Ultralytics framework was used, composed of:
+
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+  \item \textbf{Backbone:} CSPDarknet53 + C2f for extracting multi-scale image features.
+  \item \textbf{Neck:} FPN + PAN for fusing features across different scales.
+  \item \textbf{Head:} Predicts bounding boxes, class labels, and confidence scores.
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.43\linewidth}\vspace{0pt}
+\centering
+\includegraphics[width=\linewidth, keepaspectratio]{figures/network.jpg}
+\captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+\captionof{figure}{YOLOv8 Ultralytics Model Architecture for Texting-While-Driving Detection.}
+\end{minipage}
+
+\vspace{0.5em}
+
+% ---- Full-width Evaluation ----
+\textbf{Evaluation:} The trained model was assessed on the validation and test sets using standard object detection metrics like, \textbf{mAP50} (Mean Average Precision at an IoU threshold of 0.5) measures how accurately the model detects objects with at least 50\% overlap between predicted and ground truth boxes. \textbf{mAP50–95} averages precision across IoU thresholds from 0.5 to 0.95, providing a stricter measure of localization accuracy. \textbf{Precision} quantifies the proportion of correct detections among all predictions, helping reduce false positives, while \textbf{Recall} captures the proportion of actual objects successfully detected, minimizing false negatives. Additionally, a \textbf{confusion matrix} was generated to summarize class-wise performance by comparing predicted versus actual labels.
+
+\vspace{0.5em}
+\begin{center}
+  \includegraphics[width=1\linewidth, keepaspectratio]{figures/Start.png}
+  \captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+  \captionof{figure}{End-to-End Pipeline of the Model.}
+\end{center}
+
+\endgroup
+}
+
+
+% ---------- DATASET ----------
+\block{Dataset \& Annotations}{
+The dataset used for this project was obtained from Roboflow. It is designed specifically for detecting drivers who actively drive while texting on the mobile phone. The dataset consists of images in jpg format and their corresponding annotation files in text format and includes two annotated classes: \texttt{Phone} and \texttt{Wheel}. Images are split into training, validation, and test sets, with the respective labels matched to each image.
+
+\begin{center}
+\textbf{Dataset Split Summary}
+
+\begin{tabular}{lccc}
+\toprule
+ & Train & Val & Test \\
+\midrule
+Images & 620 & 177 & 89 \\
+Labels & 620 & 177 & 89 \\
+\bottomrule
+\end{tabular}
+\end{center}
+}
+
+% ================= RIGHT COLUMN =================
+\column{0.5}
+
+% ---------- RESULTS ----------
+\block{Results}{
+% three equal columns, all aligned at the top
+\noindent
+\begin{minipage}[t]{0.32\linewidth}\vspace{0pt}
+\raggedright
+\underline{\textbf{Overall Performance}} \\[0.3em]
+
+\textbf{Validation (177 images, 363 instances):} \\
+mAP50-95 = \textbf{0.888} \\
+mAP50 = \textbf{0.987} \\
+Precision = \textbf{0.967} \\
+Recall = \textbf{0.981} \\[0.3em]
+
+\textbf{Test (89 images, 181 instances):} \\
+mAP50-95 = \textbf{0.855} \\
+mAP50 = \textbf{0.983} \\
+Precision = \textbf{0.973} \\
+Recall = \textbf{0.978} \\[0.3em]
+
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.32\linewidth}\vspace{0pt}
+\raggedright
+\underline{\textbf{Performance by Class}} \\[0.3em]
+
+\textbf{Phone (Validation):} \\
+mAP50-95 = \textbf{0.823} \\
+mAP50 = \textbf{0.979} \\[0.3em]
+
+\textbf{Phone (Test):} \\
+mAP50-95 = \textbf{0.771} \\
+mAP50 = \textbf{0.972} \\[0.3em]
+
+\textbf{Wheel (Validation):} \\
+mAP50-95 = \textbf{0.953} \\
+mAP50 = \textbf{0.995} \\[0.3em]
+
+\textbf{Wheel (Test):} \\
+mAP50-95 = \textbf{0.938} \\
+mAP50 = \textbf{0.995}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.32\linewidth}\vspace{0pt}
+\centering
+\includegraphics[height=0.6\linewidth,keepaspectratio]{figures/result-3.jpg}
+\vspace{0.3em}
+\captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+\captionof{figure}{Model Output }
+
+
+\includegraphics[width=\linewidth,keepaspectratio]{figures/confusion-matrix.jpg}
+\captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+\captionof{figure}{Confusion Matrix(test set)}
+\end{minipage}
+
+\vspace{0.5em}
+
+% Training curves as a wide figure below
+{\centering
+\includegraphics[width=0.95\linewidth]{figures/result-2.jpg}\par
+\captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+\captionof{figure}{Training and Validation Performance Metrics Plotted Across Epochs. }
+}
+}
+
+
+% ---------- INTERPRETATION ----------
+\block{Interpretation }{
+\begin{minipage}[t]{0.55\linewidth}\vspace{0pt}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+  \item The model achieved excellent overall performance, with a validation and test data, indicating that the model can reliably detect objects with a high degree of overlap between predicted and actual bounding boxes.
+  \item Minimal performance drop between validation and test sets highlights the model’s ability to generalize well to unseen data, making it a strong candidate for real-world deployment scenarios.
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.43\linewidth}\vspace{0pt}
+\centering
+\includegraphics[width=\linewidth, keepaspectratio]{figures/interpretation.jpg}
+\captionsetup{type=figure,aboveskip=2pt,belowskip=2pt}
+\captionof{figure}{YOLOv8 Ultralytics Model Texting-While-Driving Detection.}
+\end{minipage}
+\vspace{0.3em}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+  \item Both the Phone and Wheel classes showed strong results across validation and test sets, demonstrating the model’s robustness in detecting crucial driver-related objects.
+  \end{itemize}
+}
+
+
+
+% ---------- CONCLUSION ----------
+\block{Conclusion \& Future Work}{
+This project successfully developed an automated pipeline using YOLOv8 to detect texting while driving with high precision and recall. The model performed consistently across validation and test sets, demonstrating strong generalization. Future work will focus on expanding object classes, improving robustness under varying lighting and occlusion, and integrating license plate recognition. On-device inference can further enhance real-time detection capabilities. Legal and ethical compliance, including GDPR, will guide future deployments.
+\vspace{0.6em}
+\begin{minipage}[t]{0.68\linewidth}
+\end{minipage}
+}
+
+
+
+% ---------- REFERENCES ----------
+\block{References}{
+\begin{minipage}[t]{0.98\linewidth}
+\begin{itemize}[leftmargin=*, itemsep=0.4em]
+  \item \href{https://docs.ultralytics.com/models/yolov8/}
+  \item \href{https://universe.roboflow.com/long-itwjh/using-phone-while-driving-qcvye/dataset/2}
+  \item \href{https://doi.org/10.1016/j.procs.2020.03.294}
+
+\end{itemize}
+\end{minipage}
+}
+
+
+
+\end{columns}
+\end{document}
