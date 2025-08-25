@@ -1,7 +1,6 @@
 # Automated_detection_of_texting_while_driving_using_Yolov8_Ultralytics
 
 <div align="center">
-  <img src="figures/UCD-logo.png" alt="UCD Logo" width="150" height="150" />
   <h1>Texting While Driving Detection Using YOLOv8</h1>
 </div>
 
